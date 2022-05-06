@@ -1,19 +1,26 @@
 {
-    "name": "<TODO: your plugin name>",
-    "url": "<TODO: Your Plugin URL here>",
-    "description": "<TODO: Your Plugin description here>",
+    "name": "Drop Events Based On Property",
+    "url": "https://github.com/posthog/drop-events-on-property-plugin",
+    "description": "Drop any events based on a combination of property key and values",
     "main": "index.js",
     "posthogVersion": ">= 1.25.0",
     "config": [
         {
-            "markdown": "<TODO: your plugin config, remove if none>"
+            "markdown": "Configure the key and optional value to filter events on"
         },
         {
-            "key": "greeting",
-            "name": "What greeting would you like to use?",
+            "key": "property_key",
+            "hint": "Which property key to filter on. If you do not specify a value, all events will be dropped.",
+            "name": "Property key to filter on",
             "type": "string",
-            "default": "Hello World!",
+            "required": true
+          },
+          {
+            "key": "property_values",
+            "hint": "Which value to match to drop events. Split multiple values by comma to filter.",
+            "name": "Property value to filter on",
+            "type": "string",
             "required": false
-        }
+          } 
     ]
 }

@@ -1,22 +1,17 @@
-// <TODO: your plugin code here - you can base it on the code below, but you don't have to>
+// Learn more about plugins at: https://posthog.com/docs/plugins/build/overview
 
-// Some internal library function
-async function getRandomNumber() {
-    return 4
-}
-
-// Plugin method that runs on plugin load
-export async function setupPlugin({ config }) {
-    console.log(`Setting up the plugin`)
-}
-
-// Plugin method that processes event
-export async function processEvent(event, { config, cache }) {
-    const counterValue = (await cache.get('greeting_counter', 0))
-    cache.set('greeting_counter', counterValue + 1)
-    if (!event.properties) event.properties = {}
-    event.properties['greeting'] = config.greeting
-    event.properties['greeting_counter'] = counterValue
-    event.properties['random_number'] = await getRandomNumber()
+// Processes each event, optionally transforming it
+export function processEvent(event, { config }) {
+    // Some events (such as $identify) don't have properties
+    if (event.properties && event.properties[config.property_key]) {
+        if (!config.property_values || config.property_values == '') {
+            return null
+        }
+        const values = config.property_values.split(',')
+        if (values.indexOf(event.properties[config.property_key]) > -1) {
+            return null
+        }
+    }
+    // Return the event to be ingested, or return null to discard
     return event
 }
